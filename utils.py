@@ -4,6 +4,7 @@ import random
 import numpy as np
 from sklearn.compose import make_column_transformer
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.datasets import load_digits
 
 
 def entropy(data):
@@ -101,7 +102,8 @@ def eval(y_true, y_pred):
         np.zeros(unique_class.shape[0]),
         np.zeros(unique_class.shape[0]),
     )
-    matrix = np.zeros((unique_class.shape[0], unique_class.shape[0]), dtype=int)
+    matrix = np.zeros(
+        (unique_class.shape[0], unique_class.shape[0]), dtype=int)
 
     for i in range(len(y_pred)):
         matrix[
@@ -205,6 +207,11 @@ def load_data(filename):
         # Remove name attributes
         data = np.delete(data, 2, axis=1)
         data = one_hot_encode(data, [1, 2])
+    elif filename == 'digits':
+        digits = load_digits()
+        data = digits.data
+        data = [line[:-1] for line in data]
+        label = [line[-1] for line in data]
     else:
         with open(f"datasets/{filename}", "r") as file:
             csvFile = csv.reader(file)
