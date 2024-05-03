@@ -179,7 +179,7 @@ def ordinal_encoding(dataset, categorical_indices):
     return dataset_copy
 
 
-def load_data(filename):
+def load_data(filename, encode=False):
     data = []
     label = []
 
@@ -193,8 +193,9 @@ def load_data(filename):
                 data.append(features)
         # Remove load id
         data = np.delete(data, 0, axis=1)
-        data = ordinal_encoding(data, [2])
-        data = one_hot_encode(data, [0, 1, 3, 4, 9, 10])
+        if encode:
+            data = ordinal_encoding(data, [2])
+            data = one_hot_encode(data, [0, 1, 3, 4, 9, 10])
     elif filename == "titanic.csv":
         with open("datasets/titanic.csv", "r") as file:
             csvFile = csv.reader(file)
@@ -206,7 +207,8 @@ def load_data(filename):
 
         # Remove name attributes
         data = np.delete(data, 2, axis=1)
-        data = one_hot_encode(data, [1, 2])
+        if encode:
+            data = one_hot_encode(data, [1, 2])
     elif filename == 'digits':
         digits = load_digits()
         data = digits.data
