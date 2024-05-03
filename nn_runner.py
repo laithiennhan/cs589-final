@@ -3,7 +3,7 @@ import sys
 import numpy as np
 
 from nn import NeuralNetwork
-from utils import load_data, normalize, split_folds, split_train_test
+from utils import eval, load_data, normalize, split_folds, split_train_test
 
 if __name__ == "__main__":
     try:
