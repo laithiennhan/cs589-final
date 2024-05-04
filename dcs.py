@@ -102,7 +102,7 @@ def split_attr_num(data, attr, criterion="ig", information=None):
 
 
 class DecisionTreeClassifier:
-    def __init__(self, min_size_split=2, min_gain=0, max_depth=None):
+    def __init__(self, min_size_split=2, min_gain=0.0, max_depth=None):
         """Set attributes for classifier"""
         self.min_size_split = min_size_split
         self.min_gain = min_gain
@@ -210,7 +210,7 @@ class DecisionTreeClassifier:
 
 
 class RandomForestClassifier:
-    def __init__(self, ntree=3, min_size_split=2, min_gain=0, max_depth=None):
+    def __init__(self, ntree=3, min_size_split=2, min_gain=0.0, max_depth=None):
         self.ntree = ntree
         self.min_size_split = min_size_split
         self.min_gain = min_gain
