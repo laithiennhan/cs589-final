@@ -234,7 +234,7 @@ def load_data(filename, encode=False):
                 features = [convert_to_float(item) for item in line[:-1]]
                 label.append(line[-1])
                 data.append(features)
-        data = data.astype(np.float64)
+        # data = data.astype(np.float64)
     else:
         with open(f"datasets/{filename}", "r") as file:
             csvFile = csv.reader(file)
