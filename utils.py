@@ -200,10 +200,11 @@ def load_data(filename, encode=False):
                 data.append(features)
         # Remove loan id
         data = np.delete(data, 0, axis=1)
+        data = ordinal_encoding(data, [2])
         if encode:
-            data = ordinal_encoding(data, [2])
             data = one_hot_encode(data, [0, 1, 3, 4, 9, 10])
-        data = data.astype(np.float64)
+        else:
+            data = ordinal_encoding(data, [0, 1, 3, 4, 9, 10])
     elif filename == "titanic.csv":
         with open("datasets/titanic.csv", "r") as file:
             csvFile = csv.reader(file)
@@ -217,7 +218,8 @@ def load_data(filename, encode=False):
         data = np.delete(data, 1, axis=1)
         if encode:
             data = one_hot_encode(data, [1])
-        data = data.astype(np.float64)
+        else:
+            data = ordinal_encoding(data, [1])
     elif filename == "digits":
         data, label = load_digits(return_X_y=True)
     else:
@@ -230,4 +232,4 @@ def load_data(filename, encode=False):
                 data.append(features)
         data = np.array(data)
 
-    return np.array(data), np.array(label)
+    return np.array(data, dtype=float), np.array(label, dtype=float)
