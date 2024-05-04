@@ -3,8 +3,8 @@ import random
 
 import numpy as np
 from sklearn.compose import make_column_transformer
-from sklearn.preprocessing import OneHotEncoder
 from sklearn.datasets import load_digits
+from sklearn.preprocessing import OneHotEncoder
 
 
 def entropy(data):
@@ -102,8 +102,7 @@ def eval(y_true, y_pred):
         np.zeros(unique_class.shape[0]),
         np.zeros(unique_class.shape[0]),
     )
-    matrix = np.zeros(
-        (unique_class.shape[0], unique_class.shape[0]), dtype=int)
+    matrix = np.zeros((unique_class.shape[0], unique_class.shape[0]), dtype=int)
 
     for i in range(len(y_pred)):
         matrix[
@@ -191,7 +190,7 @@ def load_data(filename, encode=False):
                 features = [convert_to_float(item) for item in line[:-1]]
                 label.append(line[-1])
                 data.append(features)
-        # Remove load id
+        # Remove loan id
         data = np.delete(data, 0, axis=1)
         if encode:
             data = ordinal_encoding(data, [2])
@@ -209,7 +208,7 @@ def load_data(filename, encode=False):
         data = np.delete(data, 2, axis=1)
         if encode:
             data = one_hot_encode(data, [1, 2])
-    elif filename == 'digits':
+    elif filename == "digits":
         digits = load_digits()
         data = digits.data
         data = [line[:-1] for line in data]
@@ -224,4 +223,4 @@ def load_data(filename, encode=False):
                 data.append(features)
         data = np.array(data)
 
-    return data, np.array(label)
+    return np.array(data), np.array(label)
