@@ -102,7 +102,8 @@ def eval(y_true, y_pred):
         np.zeros(unique_class.shape[0]),
         np.zeros(unique_class.shape[0]),
     )
-    matrix = np.zeros((unique_class.shape[0], unique_class.shape[0]), dtype=int)
+    matrix = np.zeros(
+        (unique_class.shape[0], unique_class.shape[0]), dtype=int)
 
     for i in range(len(y_pred)):
         matrix[
@@ -123,7 +124,8 @@ def eval(y_true, y_pred):
         if precision[i] + recall[i] == 0:
             continue
         else:
-            f1.append(2 * precision[i] * recall[i] / (precision[i] + recall[i]))
+            f1.append(2 * precision[i] * recall[i] /
+                      (precision[i] + recall[i]))
 
     f1 = np.mean(f1)
     accuracy = np.mean(accuracy)
