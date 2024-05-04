@@ -4,7 +4,7 @@ import random
 import numpy as np
 from sklearn.compose import make_column_transformer
 from sklearn.datasets import load_digits
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 
 
 def entropy(data):
@@ -172,18 +172,8 @@ def convert_to_float(item):
 
 
 def ordinal_encoding(dataset, categorical_indices):
-    dataset_copy = dataset.copy()
-    for i in categorical_indices:
-        curr_val = 0
-        value_map = dict()
-        for row in dataset_copy:
-            if row[i] not in value_map.keys():
-                row[i] = curr_val
-                value_map[row[i]] = curr_val
-                curr_val += 1
-            else:
-                row[i] = value_map[row[i]]
-    return dataset_copy
+    enc = OrdinalEncoder()
+    dataset[:, categorical_indices] = enc.fit_transform(dataset[:, categorical_indices])
 
 
 def load_data(filename, encode=False):
@@ -203,11 +193,11 @@ def load_data(filename, encode=False):
                 data.append(features)
         # Remove loan id
         data = np.delete(data, 0, axis=1)
-        data = ordinal_encoding(data, [2])
+        ordinal_encoding(data, [2])
         if encode:
             data = one_hot_encode(data, [0, 1, 3, 4, 9, 10])
         else:
-            data = ordinal_encoding(data, [0, 1, 3, 4, 9, 10])
+            ordinal_encoding(data, [0, 1, 3, 4, 9, 10])
 
     elif filename == "titanic.csv":
         with open("datasets/titanic.csv", "r") as file:
@@ -223,7 +213,7 @@ def load_data(filename, encode=False):
         if encode:
             data = one_hot_encode(data, [1])
         else:
-            data = ordinal_encoding(data, [1])
+            ordinal_encoding(data, [1])
     elif filename == "digits":
         data, label = load_digits(return_X_y=True)
     elif filename == "cleveland.csv":
