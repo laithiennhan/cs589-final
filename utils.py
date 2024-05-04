@@ -205,14 +205,11 @@ def load_data(filename, encode=False):
                 data.append(features)
 
         # Remove name attributes
-        data = np.delete(data, 2, axis=1)
+        data = np.delete(data, 1, axis=1)
         if encode:
-            data = one_hot_encode(data, [1, 2])
-    elif filename == "digits":
-        digits = load_digits()
-        data = digits.data
-        data = [line[:-1] for line in data]
-        label = [line[-1] for line in data]
+            data = one_hot_encode(data, [1])
+    elif filename == 'digits':
+        data, label = load_digits(return_X_y=True)
     else:
         with open(f"datasets/{filename}", "r") as file:
             csvFile = csv.reader(file)
