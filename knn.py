@@ -34,8 +34,8 @@ def train_knn(k_val, data, is_normalize):
     training_X = np.array(training_X, dtype=float)
     testing_X = np.array(testing_X, dtype=float)
     if is_normalize:
-        normalize(training_X)
-        normalize(testing_X)
+        training_X = normalize(training_X)
+        testing_X = normalize(testing_X)
     for i in range(len(testing_X)):
         neighbors = find_k_nearest_neighbors(
             testing_X[i], k_val, training_X, training_y)

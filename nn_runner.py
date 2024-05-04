@@ -27,7 +27,7 @@ if __name__ == "__main__":
     classifier = NeuralNetwork(
         X.shape[1], num_neurons, output_size, class_names=np.unique(y)
     )
-    normalize(X)
+    X = normalize(X)
     # Stratification
     folds = split_folds(y, 10)
 

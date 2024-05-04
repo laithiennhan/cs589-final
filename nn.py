@@ -20,7 +20,6 @@ class NeuralNetwork:
         self.input_size = input_size
         self.num_neurons = np.append(num_neurons, output_size)
         self.num_neurons = np.insert(self.num_neurons, 0, input_size)
-        self.output_size = output_size
         self.init_value = init_value
         self.cost_arr = []
 

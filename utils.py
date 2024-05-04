@@ -4,7 +4,7 @@ import random
 import numpy as np
 from sklearn.compose import make_column_transformer
 from sklearn.datasets import load_digits
-from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
+from sklearn.preprocessing import MinMaxScaler, OneHotEncoder, OrdinalEncoder
 
 
 def entropy(data):
@@ -102,8 +102,7 @@ def eval(y_true, y_pred):
         np.zeros(unique_class.shape[0]),
         np.zeros(unique_class.shape[0]),
     )
-    matrix = np.zeros(
-        (unique_class.shape[0], unique_class.shape[0]), dtype=int)
+    matrix = np.zeros((unique_class.shape[0], unique_class.shape[0]), dtype=int)
 
     for i in range(len(y_pred)):
         matrix[
@@ -124,8 +123,7 @@ def eval(y_true, y_pred):
         if precision[i] + recall[i] == 0:
             continue
         else:
-            f1.append(2 * precision[i] * recall[i] /
-                      (precision[i] + recall[i]))
+            f1.append(2 * precision[i] * recall[i] / (precision[i] + recall[i]))
 
     f1 = np.mean(f1)
     accuracy = np.mean(accuracy)
@@ -159,11 +157,8 @@ def one_hot_encode(data, column):
 
 def normalize(data):
     """Normalize data by column"""
-    max_d = np.max(data, axis=0)
-    min_d = np.min(data, axis=0)
-    for j in range(data.shape[1]):
-        for i in range(data.shape[0]):
-            data[i, j] = (data[i, j] - min_d[j]) / (max_d[j] - min_d[j])
+    scaler = MinMaxScaler()
+    return scaler.fit_transform(data)
 
 
 def convert_to_float(item):
