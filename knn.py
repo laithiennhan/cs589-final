@@ -75,7 +75,7 @@ def main(filename, is_normalize=False):
 
     X, y = load_data(filename, encode=True)
     k = 10
-    k_values = range(1, 52, 2)
+    k_values = range(1, 42, 2)
     results = parallel_knn(k_values, X, y, k, is_normalize)
 
     ks = list(k_values)
