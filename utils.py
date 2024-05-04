@@ -115,9 +115,17 @@ def eval(y_true, y_pred):
         if np.sum(matrix[:, i]) != 0:
             # Cases when predict positive are 0
             precision[i] = matrix[i, i] / np.sum(matrix[:, i])
-        recall[i] = matrix[i, i] / np.sum(matrix[i])
+        if np.sum(matrix[i]) != 0:
+            recall[i] = matrix[i, i] / np.sum(matrix[i])
 
-    f1 = np.mean(2 * precision * recall / (precision + recall))
+    f1 = []
+    for i in range(len(precision)):
+        if precision[i] + recall[i] == 0:
+            continue
+        else:
+            f1.append(2 * precision[i] * recall[i] / (precision[i] + recall[i]))
+
+    f1 = np.mean(f1)
     accuracy = np.mean(accuracy)
     precision = np.mean(precision)
     recall = np.mean(recall)
@@ -195,6 +203,7 @@ def load_data(filename, encode=False):
         if encode:
             data = ordinal_encoding(data, [2])
             data = one_hot_encode(data, [0, 1, 3, 4, 9, 10])
+        data = data.astype(np.float64)
     elif filename == "titanic.csv":
         with open("datasets/titanic.csv", "r") as file:
             csvFile = csv.reader(file)
@@ -208,7 +217,8 @@ def load_data(filename, encode=False):
         data = np.delete(data, 1, axis=1)
         if encode:
             data = one_hot_encode(data, [1])
-    elif filename == 'digits':
+        data = data.astype(np.float64)
+    elif filename == "digits":
         data, label = load_digits(return_X_y=True)
     else:
         with open(f"datasets/{filename}", "r") as file:

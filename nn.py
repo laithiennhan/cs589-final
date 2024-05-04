@@ -1,5 +1,3 @@
-import math
-
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -27,7 +25,6 @@ class NeuralNetwork:
         self.cost_arr = []
 
     def init_weights(self):
-        # Init weights of NN
         self.weights = []
         self.gradients = []
         self.cost = 0
@@ -36,29 +33,13 @@ class NeuralNetwork:
         num_neurons = self.num_neurons
         for i in range(1, len(num_neurons)):
             self.weights.append(
-                np.array(
-                    [
-                        [
-                            (
-                                np.random.uniform(-1, 1)
-                                if self.init_value == "uniform"
-                                else np.random.normal(0, 1)
-                            )
-                            for _ in range(num_neurons[i - 1] + 1)
-                        ]
-                        for _ in range(num_neurons[i])
-                    ]
+                np.random.uniform(-1, 1, size=(num_neurons[i], num_neurons[i - 1] + 1))
+                if self.init_value == "uniform"
+                else np.random.normal(
+                    0, 1, size=(num_neurons[i], num_neurons[i - 1] + 1)
                 )
             )
-            self.gradients.append(
-                np.array(
-                    [
-                        [0 for _ in range(num_neurons[i - 1] + 1)]
-                        for _ in range(num_neurons[i])
-                    ],
-                    dtype=float,
-                )
-            )
+            self.gradients.append(np.zeros((num_neurons[i], num_neurons[i - 1] + 1)))
 
     def fit(
         self,
@@ -78,10 +59,7 @@ class NeuralNetwork:
         if theta is not None:
             self.weights = theta
 
-        y_vectors = []
-        for i in range(len(y)):
-            y_vector = (self.class_names == y[i]).astype(int)
-            y_vectors.append(y_vector)
+        y_vectors = np.array([(self.class_names == yi).astype(int) for yi in y])
 
         for epoch in range(num_epoch):
             if epoch > 10 and epoch % 20 == 0:
@@ -89,18 +67,15 @@ class NeuralNetwork:
                     if alpha > 1e-4:
                         alpha *= 0.5
                     else:
-                        print(f"Traning stopped at epoch {epoch}")
+                        print(f"Training stopped at epoch {epoch}")
                         break
 
             self.prev_cost = self.cost
             self.cost = 0
             self.pen = 0
 
-            for i in range(math.ceil(n_row / batch_size)):
-                batch_X, batch_y = [], []
-
-                batch_X = X[i * batch_size : min((i + 1) * batch_size, n_row)]
-                batch_y = y_vectors[i * batch_size : min((i + 1) * batch_size, n_row)]
+            for i in range(0, n_row, batch_size):
+                batch_X, batch_y = X[i : i + batch_size], y_vectors[i : i + batch_size]
 
                 # Forward propagation
                 activations, _ = self.forward_propagate(batch_X, batch_y)
@@ -110,11 +85,7 @@ class NeuralNetwork:
 
                 # Apply gradient
                 self.apply_gradient(
-                    alpha,
-                    ld,
-                    min((i + 1) * batch_size, n_row) - batch_size * i,
-                    x_test,
-                    y_test,
+                    alpha, ld, min(batch_size, n_row - i), x_test, y_test
                 )
 
             self.cost /= n_row
@@ -127,15 +98,8 @@ class NeuralNetwork:
         for i in range(len(X)):
             activation = self.forward_propagate_one(X[i])
             y = y_vectors[i]
-            # Caculate cost J
-            j = sum(
-                [
-                    (
-                        -y[i] * np.log(activation[-1][i])
-                        - (1 - y[i]) * (np.log(1 - activation[-1][i]))
-                    )
-                    for i in range(len(y))
-                ]
+            j = np.sum(
+                -y * np.log(activation[-1]) - (1 - y) * np.log(1 - activation[-1])
             )
             cost += j
             res.append(activation)
@@ -150,40 +114,28 @@ class NeuralNetwork:
             cur_delta = activation[-1] - y
 
             for j in range(len(activation) - 1, 0, -1):
-                # Calculate this layer gradients
                 gradients = np.outer(cur_delta, activation[j - 1])
-
                 self.gradients[j - 1] += gradients
-
-                # Calculate layer delta
-                temp = activation[j - 1]
                 cur_delta = (
-                    temp
-                    * (1 - temp)
-                    * np.dot(np.transpose(self.weights[j - 1]), cur_delta)
-                )
-                cur_delta = np.delete(
-                    cur_delta, 0
-                )  # Remove bias because delta values do not need
+                    activation[j - 1]
+                    * (1 - activation[j - 1])
+                    * np.dot(self.weights[j - 1].T, cur_delta)
+                )[1:]
 
     def apply_gradient(self, alpha, ld, batch_size, x_test=[], y_test=[]):
         for i in range(len(self.weights) - 1, -1, -1):
-            # Add penalty
             w = self.weights[i].copy()
             w[:, 0] = 0
             self.pen += np.sum(np.square(w))
             self.gradients[i] += ld * w
             self.gradients[i] /= batch_size
-            # Update weights
             self.weights[i] -= alpha * self.gradients[i]
             self.gradients[i].fill(0)
 
         if len(x_test) != 0:
-            y_vectors = []
-            for i in range(len(y_test)):
-                y_vector = (self.class_names == y_test[i]).astype(int)
-                y_vectors.append(y_vector)
-
+            y_vectors = np.array(
+                [(self.class_names == yi).astype(int) for yi in y_test]
+            )
             _, cost = self.forward_propagate(x_test, y_vectors)
             self.cost_arr.append(cost)
 
@@ -193,7 +145,6 @@ class NeuralNetwork:
 
         activation = [X.copy()]
         for i, matrix in enumerate(self.weights):
-            # Add bias for gradient calculation
             activation[-1] = np.insert(activation[-1], 0, 1)
             z = np.dot(matrix, activation[-1])
             next_layer = sigmoid(z)
@@ -211,7 +162,7 @@ class NeuralNetwork:
     def plot(self, fig_name, step_size):
         plt.clf()
         plt.plot(np.arange(len(self.cost_arr)) * step_size, self.cost_arr)
-        plt.title("Performance J on test set")
+        plt.title(f"Performance J on test set, with step size {step_size}")
         plt.xlabel("Number of training samples given to the network")
         plt.ylabel("Performance (J)")
         plt.savefig(fig_name)
