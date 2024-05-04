@@ -102,7 +102,8 @@ def eval(y_true, y_pred):
         np.zeros(unique_class.shape[0]),
         np.zeros(unique_class.shape[0]),
     )
-    matrix = np.zeros((unique_class.shape[0], unique_class.shape[0]), dtype=int)
+    matrix = np.zeros(
+        (unique_class.shape[0], unique_class.shape[0]), dtype=int)
 
     for i in range(len(y_pred)):
         matrix[
@@ -123,7 +124,8 @@ def eval(y_true, y_pred):
         if precision[i] + recall[i] == 0:
             continue
         else:
-            f1.append(2 * precision[i] * recall[i] / (precision[i] + recall[i]))
+            f1.append(2 * precision[i] * recall[i] /
+                      (precision[i] + recall[i]))
 
     f1 = np.mean(f1)
     accuracy = np.mean(accuracy)
@@ -220,6 +222,17 @@ def load_data(filename, encode=False):
         data = data.astype(np.float64)
     elif filename == "digits":
         data, label = load_digits(return_X_y=True)
+    elif filename == "cleveland.csv":
+        with open('datasets/cleveland.csv', 'r') as file:
+            csvFile = csv.reader(file)
+            next(csvFile)  # Skip header
+            for line in csvFile:
+                if '?' in line:
+                    continue
+                features = [convert_to_float(item) for item in line[:-1]]
+                label.append(line[-1])
+                data.append(features)
+        data = data.astype(np.float64)
     else:
         with open(f"datasets/{filename}", "r") as file:
             csvFile = csv.reader(file)
