@@ -198,7 +198,10 @@ def load_data(filename, encode=False):
             next(csvFile)  # Skip header
             for line in csvFile:
                 features = [convert_to_float(item) for item in line[:-1]]
-                label.append(line[-1])
+                if line[-1] == "Y":
+                    label.append(0)
+                else:
+                    label.append(1)
                 data.append(features)
         # Remove loan id
         data = np.delete(data, 0, axis=1)
@@ -207,6 +210,7 @@ def load_data(filename, encode=False):
             data = one_hot_encode(data, [0, 1, 3, 4, 9, 10])
         else:
             data = ordinal_encoding(data, [0, 1, 3, 4, 9, 10])
+
     elif filename == "titanic.csv":
         with open("datasets/titanic.csv", "r") as file:
             csvFile = csv.reader(file)
@@ -225,16 +229,15 @@ def load_data(filename, encode=False):
     elif filename == "digits":
         data, label = load_digits(return_X_y=True)
     elif filename == "cleveland.csv":
-        with open('datasets/cleveland.csv', 'r') as file:
+        with open("datasets/cleveland.csv", "r") as file:
             csvFile = csv.reader(file)
             next(csvFile)  # Skip header
             for line in csvFile:
-                if '?' in line:
+                if "?" in line:
                     continue
                 features = [convert_to_float(item) for item in line[:-1]]
                 label.append(line[-1])
                 data.append(features)
-        # data = data.astype(np.float64)
     else:
         with open(f"datasets/{filename}", "r") as file:
             csvFile = csv.reader(file)

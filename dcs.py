@@ -1,5 +1,4 @@
 import random
-from concurrent.futures import ThreadPoolExecutor
 
 import numpy as np
 
@@ -102,7 +101,7 @@ def split_attr_num(data, attr, criterion="ig", information=None):
 
 
 class DecisionTreeClassifier:
-    def __init__(self, min_size_split=2, min_gain=0, max_depth=None):
+    def __init__(self, min_size_split=2, min_gain=0.0, max_depth=None):
         """Set attributes for classifier"""
         self.min_size_split = min_size_split
         self.min_gain = min_gain
@@ -210,7 +209,7 @@ class DecisionTreeClassifier:
 
 
 class RandomForestClassifier:
-    def __init__(self, ntree=3, min_size_split=2, min_gain=0, max_depth=None):
+    def __init__(self, ntree=3, min_size_split=2, min_gain=0.0, max_depth=None):
         self.ntree = ntree
         self.min_size_split = min_size_split
         self.min_gain = min_gain
@@ -228,15 +227,15 @@ class RandomForestClassifier:
         return tree
 
     def fit(self, X, y, attr_type, criterion="ig"):
-        # Use concurrent to construct tree in parallel
-        with ThreadPoolExecutor() as executor:
-            futures = []
-            for _ in range(self.ntree):
-                futures.append(
-                    executor.submit(self.fit_tree, X, y, attr_type, criterion)
-                )
-
-            self.trees = [future.result() for future in futures]
+        for i in range(self.ntree):
+            tree = DecisionTreeClassifier(
+                min_size_split=self.min_size_split,
+                max_depth=self.max_depth,
+                min_gain=self.min_gain,
+            )
+            X_bstrap, y_bstrap = bootstrap(X, y)
+            tree.fit(X_bstrap, y_bstrap, attr_type, criterion)
+            self.trees.append(tree)
 
     def predict_one(self, X):
         result = np.empty(self.ntree)
