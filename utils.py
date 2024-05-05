@@ -158,7 +158,7 @@ def one_hot_encode(data, column):
 def normalize(data):
     """Normalize data by column"""
     scaler = MinMaxScaler()
-    return scaler.fit_transform(data)
+    return np.array(scaler.fit_transform(data))
 
 
 def convert_to_float(item):
