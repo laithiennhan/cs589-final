@@ -24,6 +24,13 @@ if __name__ == "__main__":
     # Load data
     X, y = load_data(dataset_name, encode=True)
     output_size = 2
+    if "digit" in dataset_name:
+        output_size = 10
+    elif "cleveland" in dataset_name:
+        output_size = 2
+    else:
+        output_size = 2
+
     classifier = NeuralNetwork(
         X.shape[1], num_neurons, output_size, class_names=np.unique(y)
     )

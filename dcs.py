@@ -239,7 +239,6 @@ class RandomForestClassifier:
 
     def predict_one(self, X):
         result = np.empty(self.ntree)
-
         # Calculate the majority
         for i in range(self.ntree):
             result[i] = self.trees[i].predict_one(X)

@@ -45,12 +45,12 @@ class NeuralNetwork:
         X,
         y,
         alpha=1.0,
-        x_test=[],
-        y_test=[],
         ld=0.1,
         num_epoch=1000,
         batch_size=32,
         theta=None,
+        x_test=[],
+        y_test=[],
     ):
         n_row = X.shape[0]
         self.init_weights()

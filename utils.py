@@ -111,7 +111,8 @@ def eval(y_true, y_pred):
         ] += 1
 
     for i in range(len(unique_class)):
-        accuracy[i] = np.trace(matrix) / len(y_true)
+        if len(y_true) != 0:
+            accuracy[i] = np.trace(matrix) / len(y_true)
         if np.sum(matrix[:, i]) != 0:
             # Cases when predict positive are 0
             precision[i] = matrix[i, i] / np.sum(matrix[:, i])
