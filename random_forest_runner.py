@@ -50,7 +50,7 @@ def eval_dataset(
     axes[1].set_ylabel("F1")
     axes[1].plot(ntrees, f1, marker="o")
 
-    plt.savefig(f"figures/forset_{dataset}_{criterion}.jpg")
+    plt.savefig(f"figures/forest_{dataset}_{criterion}.jpg")
     print(f"Random forest {dataset} {criterion} graph created")
 
 

@@ -277,36 +277,26 @@ Algorithms we are using:
 \end{itemize}
 
 \subsection{Digits Dataset}
-\begin{enumerate}[label=(\alph*)]
-	\item kNN
-	\item Random Forest
-	\item Neural Network
-	\item Ensemble
-\end{enumerate}
+\subsection*{Random Forest}
+Hyper-parameter:
+\begin{itemize}
+	\item \text{Split criterion: Information Gain}
+	\item $min\_size\_split = 20$
+	\item $min\_gain = 0.006$
+	\item $max\_depth = 7$
+\end{itemize}
+\begin{figure}[]
+	\includegraphics[width=\textwidth]{figures/forest_digits_ig.jpg}
+	\caption{Random forest on Digits dataset}
+	\label{fig:forest-digits}
+\end{figure}
 
 
 \subsection{Titanic Dataset}
-\begin{enumerate}[label=(\alph*)]
-	\item kNN
-	\item Random Forest
-	\item Neural Network
-	\item Ensemble
-\end{enumerate}
+
 \subsection{Loan Dataset}
-\begin{enumerate}[label=(\alph*)]
-	\item kNN
-	\item Random Forest
-	\item Neural Network
-	\item Ensemble
-\end{enumerate}
 
 \subsection{Parkinsons Dataset}
-\begin{enumerate}[label=(\alph*)]
-	\item kNN
-	\item Random Forest
-	\item Neural Network
-	\item Ensemble
-\end{enumerate}
 
 \end{document}
 
