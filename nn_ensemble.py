@@ -29,7 +29,7 @@ class NeuralNetworkEnsemble:
         self.models = []
         for i in range(self.n_estimator):
             model = NeuralNetwork(
-                self.input_size, [10], self.output_size, self.class_names
+                self.input_size, [20], self.output_size, self.class_names
             )
             X_bstrap, y_bstrap = bootstrap(X, y)
             model.fit(X_bstrap, y_bstrap, alpha=6, ld=0.01, num_epoch=300)

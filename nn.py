@@ -160,7 +160,7 @@ class NeuralNetwork:
 
     def plot(self, fig_name, step_size):
         plt.clf()
-        plt.plot(np.arange(len(self.cost_arr)) * step_size, self.cost_arr)
+        plt.plot(np.arange(len(self.cost_arr)) * step_size, self.cost_arr, marker="o")
         plt.title(f"Performance J on test set, with step size {step_size}")
         plt.xlabel("Number of training samples given to the network")
         plt.ylabel("Performance (J)")

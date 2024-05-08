@@ -43,12 +43,12 @@ def eval_dataset(
     axes[0].set_title("Accuracy vs ntree")
     axes[0].set_xlabel("ntree")
     axes[0].set_ylabel("Accuracy")
-    axes[0].plot(ntrees, accuracy)
+    axes[0].plot(ntrees, accuracy, marker="o")
 
     axes[1].set_title("F1 vs ntree")
     axes[1].set_xlabel("ntree")
     axes[1].set_ylabel("F1")
-    axes[1].plot(ntrees, f1)
+    axes[1].plot(ntrees, f1, marker="o")
 
     plt.savefig(f"figures/forset_{dataset}_{criterion}.jpg")
     print(f"Random forest {dataset} {criterion} graph created")
