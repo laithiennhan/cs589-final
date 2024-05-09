@@ -252,13 +252,13 @@ To facilitate the task of creating this table on \LaTeX, please visit this \href
 
 \textbf{There are four ways in which we may receive extra credit on this assignment.} If you choose to work on any of the tasks below, please clearly indicate in your report,  \textcolor{dark-red}{\textbf{in red}}, which specific tasks you are working on for extra credit. Describe what you did as part of that task and discuss the corresponding results. Any source code you develop should be included in your Gradescope submission.
 
-\noindent \HIGHLIGHT{(Extra Points \#1: 10 Points)}
+\noindent \HIGHLIGHT{\textcolor{dark-red}{(Extra Points \#1: 10 Points)}}
 You may earn up to 10 extra points if you analyze all four datasets using an additional algorithm. That is, in this case you would be evaluating more than just two algorithms on each dataset.
 
 \noindent \HIGHLIGHT{(Extra Points \#2: 10 Points)}
 You may earn up to 10 extra points if you select a new \textit{challenging} dataset and evaluate the performance of different algorithms on it. A challenging dataset should necessarily include both categorical and numerical attributes and have more than two classes; or it should be a dataset where you have to classify images.
 
-\noindent \HIGHLIGHT{(Extra Points \#3: 15 Points)}
+\noindent \HIGHLIGHT{\textcolor{dark-red}{ (Extra Points \#3: 15 Points) }}
 You may earn up to 15 extra points if you \textit{combine} different algorithms and construct an ensemble. For instance, you could create an ensemble composed of three neural networks (each with a different architecture) and a random forest. The process of training the ensemble would be as described in class---each algorithm would be trained based on its own bootstrap dataset, etc. The final predictions would then be determined via majority voting. Evaluate your ensemble algorithm on all four datasets discussed in Section \ref{sec:datasets}.
 
 
@@ -278,19 +278,71 @@ Algorithms we are using:
 
 \subsection{Digits Dataset}
 \subsection*{Random Forest}
-Hyper-parameter:
 \begin{itemize}
 	\item \text{Split criterion: Information Gain}
-	\item $min\_size\_split = 20$
-	\item $min\_gain = 0.006$
-	\item $max\_depth = 7$
+	\item $min\_size\_split = 10$
+	\item $min\_gain = 0.1$
+	\item $max\_depth = 10$
 \end{itemize}
-\begin{figure}[]
+
+\begin{figure}[!h]
 	\includegraphics[width=\textwidth]{figures/forest_digits_ig.jpg}
 	\caption{Random forest on Digits dataset}
 	\label{fig:forest-digits}
 \end{figure}
 
+Since the datasets has many features per instance and many instances, the Decision Trees need to be more complex to be able to capture all the pattern
+in the dataset. As can see from the graph, only 1 weak Decision Tree classifier performs really badly but as the number of trees increases, the accuracy
+and F1 score increases to nearly 1 at ntree = 50. The more trees are trained, the more patterns would be capture by the Random Forest since each tree
+is being trained on a bootstrap subset of the original train data. So by getting the majority vote from the Random Forest, it is more likely to get
+the correct prediction. Also, having only 64 numerical data is eaiser for Random Forest as at every node in the tree there would only be 2 split.
+
+\subsection*{Neural Network}
+\begin{enumerate}[label=(\alph*)]
+	\item \begin{itemize}
+		      \item $\lambda = 0.01$
+		      \item $\alpha = 0.01$
+	      \end{itemize}
+
+	      \begin{table}[!h]
+		      \centering
+		      \begin{tabular}{|l|l|l|}
+			      \hline
+			      Architecture      & Accuracy Score & F1 Score \\ \hline
+			      {[}64 100 10{]}   & 0.951538       & 0.983528 \\ \hline
+			      {[}64 40 10{]}    & 0.945853       & 0.972386 \\ \hline
+			      {[}64 20 20 10{]} & 0.930637       & 0.983614 \\ \hline
+		      \end{tabular}
+	      \end{table}
+	\item \begin{itemize}
+		      \item $\lambda = 0.1$
+		      \item $\alpha = 0.1$
+	      \end{itemize}
+
+	      \begin{table}[!h]
+		      \centering
+		      \begin{tabular}{|l|l|l|}
+			      \hline
+			      Architecture      & Accuracy Score & F1 Score \\ \hline
+			      {[}64 100 10{]}   & 0.962324       & 0.983614 \\ \hline
+			      {[}64 40 10{]}    & 0.935222       & 0.977977 \\ \hline
+			      {[}64 20 20 10{]} & 0.935483       & 0.983543 \\ \hline
+		      \end{tabular}
+	      \end{table}
+\end{enumerate}
+
+\begin{figure}[!h]
+	\includegraphics[width=\textwidth]{figures/nn_digits_cost.png}
+	\caption{Cost J against the number of instances introduced with $\lambda=0.01, \alpha=0.01$}
+	\label{fig:nn-digits}
+\end{figure}
+
+The dataset has the trend that more layers means less accuracy but it can be offset with enough neurons per layer, as with the same number of layers
+the more neurons the network has, the better it performs. Having a larger $\lambda$ results in a higher performance overall while $\alpha$ values does
+not have the same magnitude of impact because the $\alpha$ values is halfed as more instances is introduced to the instances. Since the dataset has
+so many datasets, that means the $\alpha$ values would converge to a small number so the final weight of the network would be similar. As expected,
+the more instances are introduced to the network, the cost J decreases as the weight is updated to better suited the dataset until it converges to a
+small number (almost constant).
 
 \subsection{Titanic Dataset}
 
@@ -298,10 +350,6 @@ Hyper-parameter:
 
 \subsection{Parkinsons Dataset}
 
+\subsection{Summary}
+
 \end{document}
-
-
-
-
-
-

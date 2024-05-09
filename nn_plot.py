@@ -18,20 +18,25 @@ if __name__ == "__main__":
         ld = float(sys.argv[2])
         alpha = float(sys.argv[3])
         num_hidden_layers = int(sys.argv[4])
-        if len(sys.argv) != num_hidden_layers + 5:
-            print(len(sys.argv))
+        if len(sys.argv) < num_hidden_layers + 5:
             raise Exception()
         num_neurons = []
-        for i in range(5, len(sys.argv)):
+        for i in range(5, 5 + num_hidden_layers):
             num_neurons.append(int(sys.argv[i]))
     except Exception as err:
         print("Wrong arguments provided")
-        print(f"{type(err).__name__} - {err}")
+        print(f"{err}")
         exit()
 
     # Load data
-    output_size = 2
     X, y = load_data(dataset_name, encode=True)
+    output_size = 2
+    if "digit" in dataset_name:
+        output_size = 10
+    elif "cleveland" in dataset_name:
+        output_size = 2
+    else:
+        output_size = 2
 
     classifier = NeuralNetwork(
         X.shape[1], num_neurons, output_size, class_names=np.unique(y)
@@ -40,7 +45,7 @@ if __name__ == "__main__":
 
     # Training and testing
     num_epoch = 1
-    batch_size = 10
+    batch_size = 20
 
     accuracy_t, f1_t = [], []
     X_train, X_test, y_train, y_test = split_train_test(X, y)
