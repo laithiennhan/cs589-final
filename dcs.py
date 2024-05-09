@@ -235,6 +235,7 @@ class RandomForestClassifier:
         self.trees = []
 
     def fit(self, X, y):
+        self.trees = []
         for i in range(self.ntree):
             tree = DecisionTreeClassifier(
                 min_size_split=self.min_size_split,

@@ -278,6 +278,9 @@ Algorithms we are using:
 \end{itemize}
 
 \subsection{Digits Dataset}
+
+All attributes are numerical so no need for one hot encode.
+
 \subsection*{Random Forest}
 \begin{itemize}
 	\item \text{Split criterion: Information Gain}
@@ -346,7 +349,8 @@ the more instances are introduced to the network, the cost J decreases as the we
 small number (almost constant).
 
 \subsection{Titanic Dataset}
-We remove the name column from the dataset as we think that information does not really help to classify the result.
+We remove the name column from the dataset as we think that information does not really help to classify the result. We also one hot encode the categorical
+attributes.
 
 \subsection*{Random Forest}
 \begin{itemize}
@@ -358,7 +362,7 @@ We remove the name column from the dataset as we think that information does not
 
 \begin{figure}[H]
 	\includegraphics[width=\textwidth]{figures/forest_titanic.csv_ig.jpg}
-	\caption{Random forest on Digits dataset}
+	\caption{Random forest on Titanic dataset}
 	\label{fig:forest-titanic}
 \end{figure}
 
@@ -409,6 +413,72 @@ may leads to overfitting since there are only 7 features. But with the optimal $
 As a result we get an overall relatively equal score for different hyper parameters set.
 
 \subsection{Loan Dataset}
+
+We remove the LOAN\_ID column from the dataset as we think that information does not really help to classify the result. We also one hot encode the categorical
+attributes.
+
+\subsection*{Random Forest}
+\begin{itemize}
+	\item \text{Split criterion: Information Gain}
+	\item $min\_size\_split = 12$
+	\item $min\_gain = 0.01$
+	\item $max\_depth = 12$
+\end{itemize}
+
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/forest_loan.csv_ig.jpg}
+	\caption{Random forest on Loan dataset}
+	\label{fig:forest-loan}
+\end{figure}
+
+While F1 score increases as ntree increases until it reaches a constant, accuracy score seems more unclear about its trends. The accuracy for
+ntree = 20 really took a dip then increases back up so we are not really sure why. This dataset is a complicated one with more categorical attributes
+than numerical attributes. This could be the factor contributing to the lower score when compared to the Titanic dataset as well as the inconsistancy
+in accuracy score as a function of ntree.
+
+\subsection*{Neural Network}
+\begin{enumerate}[label=(\alph*)]
+	\item \begin{itemize}
+		      \item $\lambda = 0.01$
+		      \item $\alpha = 6$
+	      \end{itemize}
+
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|l|l|l|}
+			      \hline
+			      Architecture     & Accuracy Score & F1 Score \\ \hline
+			      {[}18 4 2{]}     & 0.740908       & 0.780337 \\ \hline
+			      {[}18 20 2{]}    & 0.740908       & 0.780337 \\ \hline
+			      {[}18 20 20 2{]} & 0.731523       & 0.682143 \\ \hline
+		      \end{tabular}
+	      \end{table}
+	\item \begin{itemize}
+		      \item $\lambda = 0.1$
+		      \item $\alpha = 0.1$
+	      \end{itemize}
+
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|l|l|l|}
+			      \hline
+			      Architecture     & Accuracy Score & F1 Score \\ \hline
+			      {[}18 20 2{]}    & 0.740908       & 0.780337 \\ \hline
+			      {[}18 20 20 2{]} & 0.740908       & 0.780337 \\ \hline
+		      \end{tabular}
+	      \end{table}
+\end{enumerate}
+
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/nn_loan.csv_cost.png}
+	\caption{Cost J against the number of instances introduced with $\lambda=0.01, \alpha=6$ and architecture [18, 20, 2]}
+	\label{fig:nn-loan}
+\end{figure}
+
+For this dataset, the accuracy and F1 score for 1 and 2 hidden layers seems to converge given small enough starting $\alpha$ values. It still has the
+trend that more layers means less performance, but it no longer has the property that more neurons can offset this. Rather, the scores seems to be
+capped. Probably because of the many categorical attributes that is one hot encode that is causing the converging of accuracy score and F1 score
+since all of its are 1 and 0 values.
 
 \subsection{Parkinsons Dataset}
 

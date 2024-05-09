@@ -6,9 +6,9 @@ import numpy as np
 from nn import NeuralNetwork
 from utils import eval, load_data, normalize, split_folds, split_train_test
 
-
 num_epoch = 1000
 batch_size = 32
+
 
 def eval_one_fold(args):
     X, y, folds, k, classifier, ld, alpha = args
@@ -72,22 +72,6 @@ if __name__ == "__main__":
         for i in range(10):
             accuracy_t.append(results[0])
             f1_t.append(results[1])
-
-    # for k in range(10):
-    #     X_train, X_test, y_train, y_test = split_train_test(X, y, folds, k)
-    #     print(f"Fitting k = {k}")
-    #     classifier.fit(
-    #         X_train,
-    #         y_train,
-    #         alpha=alpha,
-    #         ld=ld,
-    #         batch_size=batch_size,
-    #         num_epoch=num_epoch,
-    #     )
-    #     y_pred = classifier.predict(X_test)
-    #     metrics = eval(y_test, y_pred)
-    #     accuracy_t.append(metrics["accuracy"])
-    #     f1_t.append(metrics["f1"])
 
     print(f"Neural Network architecture: {classifier.num_neurons}")
     print(f"Accuracy: {np.mean(accuracy_t):.6f}")

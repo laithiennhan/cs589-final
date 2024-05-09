@@ -65,6 +65,7 @@ if __name__ == "__main__":
     ntrees = [1, 5, 10, 20, 30, 40, 50]
     accuracy, f1 = [], []
     for ntree in ntrees:
+        accuracy_t, f1_t = [], []
         print(f"Fitting ntree = {ntree}")
         classifier = RandomForestClassifier(
             ntree=ntree,
@@ -74,7 +75,7 @@ if __name__ == "__main__":
             attr_type=attr_type,
             criterion=criterion,
         )
-        accuracy_t, f1_t = [], []
+
         with multiprocessing.Pool(processes=5) as pool:
             results = pool.map(
                 eval_one_fold,
