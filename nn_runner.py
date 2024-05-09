@@ -6,13 +6,12 @@ import numpy as np
 from nn import NeuralNetwork
 from utils import eval, load_data, normalize, split_folds, split_train_test
 
+
 num_epoch = 1000
 batch_size = 32
-alpha = 1
-ld = 0
 
 def eval_one_fold(args):
-    X, y, folds, k, classifier = args
+    X, y, folds, k, classifier, ld, alpha = args
     # Training and testing
     X_train, X_test, y_train, y_test = split_train_test(X, y, folds, k)
     print(f"Fitting k = {k}")
@@ -66,9 +65,9 @@ if __name__ == "__main__":
     accuracy_t, f1_t = [], []
     print(f"Lambda = {ld}")
     print(f"Alpha = {alpha}")
-    with multiprocessing.Pool() as pool:
+    with multiprocessing.Pool(processes=5) as pool:
         results = pool.map(
-            eval_one_fold, [(X, y, folds, k, classifier) for k in range(10)]
+            eval_one_fold, [(X, y, folds, k, classifier, ld, alpha) for k in range(10)]
         )
         for i in range(10):
             accuracy_t.append(results[0])

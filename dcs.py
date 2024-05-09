@@ -101,18 +101,26 @@ def split_attr_num(data, attr, criterion="ig", information=None):
 
 
 class DecisionTreeClassifier:
-    def __init__(self, min_size_split=2, min_gain=0.0, max_depth=None):
+    def __init__(
+        self,
+        min_size_split=2,
+        min_gain=0.0,
+        max_depth=None,
+        attr_type=[],
+        criterion="ig",
+    ):
         """Set attributes for classifier"""
         self.min_size_split = min_size_split
         self.min_gain = min_gain
         self.max_depth = max_depth
+        self.attr_type = attr_type
+        self.criterion = criterion
 
-    def fit(self, X, y, attr_type, criterion="ig"):
+    def fit(self, X, y):
         self.num_attr = X.shape[1]
         # Establish the attributes type for every feature
-        self.attr_type = attr_type
 
-        if criterion == "gini":
+        if self.criterion == "gini":
             self.root = self.build_tree_gini(
                 np.append(X, y[:, np.newaxis], axis=1), list(range(X.shape[1])), 0
             )
@@ -209,32 +217,34 @@ class DecisionTreeClassifier:
 
 
 class RandomForestClassifier:
-    def __init__(self, ntree=3, min_size_split=2, min_gain=0.0, max_depth=None):
+    def __init__(
+        self,
+        ntree=3,
+        min_size_split=2,
+        min_gain=0.0,
+        max_depth=None,
+        attr_type=[],
+        criterion="ig",
+    ):
         self.ntree = ntree
         self.min_size_split = min_size_split
         self.min_gain = min_gain
         self.max_depth = max_depth
+        self.attr_type = attr_type
+        self.criterion = criterion
         self.trees = []
 
-    def fit_tree(self, X, y, attr_type, criterion):
-        tree = DecisionTreeClassifier(
-            min_size_split=self.min_size_split,
-            max_depth=self.max_depth,
-            min_gain=self.min_gain,
-        )
-        X_bstrap, y_bstrap = bootstrap(X, y)
-        tree.fit(X_bstrap, y_bstrap, attr_type, criterion)
-        return tree
-
-    def fit(self, X, y, attr_type, criterion="ig"):
+    def fit(self, X, y):
         for i in range(self.ntree):
             tree = DecisionTreeClassifier(
                 min_size_split=self.min_size_split,
                 max_depth=self.max_depth,
                 min_gain=self.min_gain,
+                attr_type=self.attr_type,
+                criterion=self.criterion,
             )
             X_bstrap, y_bstrap = bootstrap(X, y)
-            tree.fit(X_bstrap, y_bstrap, attr_type, criterion)
+            tree.fit(X_bstrap, y_bstrap)
             self.trees.append(tree)
 
     def predict_one(self, X):

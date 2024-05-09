@@ -84,7 +84,7 @@ if __name__ == "__main__":
     # Training and testing
     classifier = NeuralNetworkEnsemble(3, X.shape[1], output_size, np.unique(y))
     accuracy_t, f1_t = [], []
-    with multiprocessing.Pool() as pool:
+    with multiprocessing.Pool(processes=5) as pool:
         results = pool.map(
             eval_one_fold, [(X, y, folds, k, classifier) for k in range(10)]
         )

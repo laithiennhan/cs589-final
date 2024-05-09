@@ -1,6 +1,7 @@
 \documentclass[letterpaper]{article}
 \usepackage{enumitem}
 \usepackage{geometry}
+\usepackage{float}
 \geometry{margin=1in}
 \usepackage[protrusion=true,expansion=true]{microtype}
 \usepackage[boxruled,linesnumbered,vlined,inoutnumbered]{algorithm2e}
@@ -285,7 +286,7 @@ Algorithms we are using:
 	\item $max\_depth = 10$
 \end{itemize}
 
-\begin{figure}[!h]
+\begin{figure}[H]
 	\includegraphics[width=\textwidth]{figures/forest_digits_ig.jpg}
 	\caption{Random forest on Digits dataset}
 	\label{fig:forest-digits}
@@ -293,7 +294,7 @@ Algorithms we are using:
 
 Since the datasets has many features per instance and many instances, the Decision Trees need to be more complex to be able to capture all the pattern
 in the dataset. As can see from the graph, only 1 weak Decision Tree classifier performs really badly but as the number of trees increases, the accuracy
-and F1 score increases to nearly 1 at ntree = 50. The more trees are trained, the more patterns would be capture by the Random Forest since each tree
+score increases and peaking at ntree = 30 while the F1 score peaks at ntree=50. The more trees are trained, the more patterns would be capture by the Random Forest since each tree
 is being trained on a bootstrap subset of the original train data. So by getting the majority vote from the Random Forest, it is more likely to get
 the correct prediction. Also, having only 64 numerical data is eaiser for Random Forest as at every node in the tree there would only be 2 split.
 
@@ -301,17 +302,17 @@ the correct prediction. Also, having only 64 numerical data is eaiser for Random
 \begin{enumerate}[label=(\alph*)]
 	\item \begin{itemize}
 		      \item $\lambda = 0.01$
-		      \item $\alpha = 0.01$
+		      \item $\alpha = 6$
 	      \end{itemize}
 
-	      \begin{table}[!h]
+	      \begin{table}[H]
 		      \centering
 		      \begin{tabular}{|l|l|l|}
 			      \hline
 			      Architecture      & Accuracy Score & F1 Score \\ \hline
-			      {[}64 100 10{]}   & 0.951538       & 0.983528 \\ \hline
-			      {[}64 40 10{]}    & 0.945853       & 0.972386 \\ \hline
-			      {[}64 20 20 10{]} & 0.930637       & 0.983614 \\ \hline
+			      {[}64 100 10{]}   & 0.946349       & 0.977977 \\ \hline
+			      {[}64 40 10{]}    & 0.951350       & 0.983528 \\ \hline
+			      {[}64 20 20 10{]} & 0.919259       & 0.988963 \\ \hline
 		      \end{tabular}
 	      \end{table}
 	\item \begin{itemize}
@@ -319,21 +320,21 @@ the correct prediction. Also, having only 64 numerical data is eaiser for Random
 		      \item $\alpha = 0.1$
 	      \end{itemize}
 
-	      \begin{table}[!h]
+	      \begin{table}[H]
 		      \centering
 		      \begin{tabular}{|l|l|l|}
 			      \hline
 			      Architecture      & Accuracy Score & F1 Score \\ \hline
-			      {[}64 100 10{]}   & 0.962324       & 0.983614 \\ \hline
-			      {[}64 40 10{]}    & 0.935222       & 0.977977 \\ \hline
-			      {[}64 20 20 10{]} & 0.935483       & 0.983543 \\ \hline
+			      {[}64 100 10{]}   & 0.929894       & 0.972386 \\ \hline
+			      {[}64 40 10{]}    & 0.930053       & 0.972386 \\ \hline
+			      {[}64 20 20 10{]} & 0.914248       & 0.966915 \\ \hline
 		      \end{tabular}
 	      \end{table}
 \end{enumerate}
 
-\begin{figure}[!h]
+\begin{figure}[H]
 	\includegraphics[width=\textwidth]{figures/nn_digits_cost.png}
-	\caption{Cost J against the number of instances introduced with $\lambda=0.01, \alpha=0.01$}
+	\caption{Cost J against the number of instances introduced with $\lambda=0.01, \alpha=1$ and architecture [64, 40, 10]}
 	\label{fig:nn-digits}
 \end{figure}
 
@@ -345,11 +346,70 @@ the more instances are introduced to the network, the cost J decreases as the we
 small number (almost constant).
 
 \subsection{Titanic Dataset}
+We remove the name column from the dataset as we think that information does not really help to classify the result.
+
+\subsection*{Random Forest}
+\begin{itemize}
+	\item \text{Split criterion: Information Gain}
+	\item $min\_size\_split = 11$
+	\item $min\_gain = 0.01$
+	\item $max\_depth = 12$
+\end{itemize}
+
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/forest_titanic.csv_ig.jpg}
+	\caption{Random forest on Digits dataset}
+	\label{fig:forest-titanic}
+\end{figure}
+
+Since the dataset is a fairly complicate dataset with both numerical and categorical, the more complex the model is the better. As seen from the graph
+ntree from 20 to 50 is the better performer compared to ntree < 20 in both accuracy and F1 score. There are less features and with less instance than
+the digits datasets, so there is generally less pattern to learn from, hence a lower score overall.
+
+\subsection*{Neural Network}
+\begin{enumerate}[label=(\alph*)]
+	\item \begin{itemize}
+		      \item $\lambda = 0.01$
+		      \item $\alpha = 6$
+	      \end{itemize}
+
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|l|l|l|}
+			      \hline
+			      Architecture    & Accuracy Score & F1 Score \\ \hline
+			      {[}7 40 2{]}    & 0.814128       & 0.816573 \\ \hline
+			      {[}7 20 20 2{]} & 0.825092       & 0.804512 \\ \hline
+		      \end{tabular}
+	      \end{table}
+	\item \begin{itemize}
+		      \item $\lambda = 0.1$
+		      \item $\alpha = 0.1$
+	      \end{itemize}
+
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|l|l|l|}
+			      \hline
+			      Architecture    & Accuracy Score & F1 Score \\ \hline
+			      {[}7 40 2{]}    & 0.792344       & 0.781514 \\ \hline
+			      {[}7 20 20 2{]} & 0.803214       & 0.792344 \\ \hline
+		      \end{tabular}
+	      \end{table}
+\end{enumerate}
+
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/nn_titanic.csv_cost.png}
+	\caption{Cost J against the number of instances introduced with $\lambda=0.01, \alpha=6$ and architecture [7, 40, 2]}
+	\label{fig:nn-titanic}
+\end{figure}
+
+The same trends of more layers means less performance but it can be offset with enough neurons. However in this case, too much neurons
+may leads to overfitting since there are only 7 features. But with the optimal $\lambda$ it may reduce the overfitting of the network.
+As a result we get an overall relatively equal score for different hyper parameters set.
 
 \subsection{Loan Dataset}
 
 \subsection{Parkinsons Dataset}
-
-\subsection{Summary}
 
 \end{document}
