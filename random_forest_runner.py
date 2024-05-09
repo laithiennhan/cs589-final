@@ -51,9 +51,9 @@ if __name__ == "__main__":
             True,
         ]
     elif "parkinsons" in dataset:
-        attr_type = [True for _ in range(22)]
+        attr_type = [False for _ in range(22)]
     elif "digit" in dataset:
-        attr_type = [True for _ in range(64)]
+        attr_type = [False for _ in range(64)]
 
     if attr_type is None:
         print("Invalid dataset")

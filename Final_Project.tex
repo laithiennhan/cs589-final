@@ -295,11 +295,11 @@ All attributes are numerical so no need for one hot encode.
 	\label{fig:forest-digits}
 \end{figure}
 
-Since the datasets has many features per instance and many instances, the Decision Trees need to be more complex to be able to capture all the pattern
+Since the datasets has many features per instance and many instances, the model needs to be more complex to be able to capture all the pattern
 in the dataset. As can see from the graph, only 1 weak Decision Tree classifier performs really badly but as the number of trees increases, the accuracy
-score increases and peaking at ntree = 30 while the F1 score peaks at ntree=50. The more trees are trained, the more patterns would be capture by the Random Forest since each tree
-is being trained on a bootstrap subset of the original train data. So by getting the majority vote from the Random Forest, it is more likely to get
-the correct prediction. Also, having only 64 numerical data is eaiser for Random Forest as at every node in the tree there would only be 2 split.
+score increases and peaking at ntree = 30 while the F1 score peaks at ntree = 40. The more trees are trained, the more patterns would be capture by
+the Random Forest since each tree is being trained on a bootstrap subset of the original train data. Having only numerical data really impact the
+speed at which the model is trained.
 
 \subsection*{Neural Network}
 \begin{enumerate}[label=(\alph*)]
@@ -482,4 +482,104 @@ since all of its are 1 and 0 values.
 
 \subsection{Parkinsons Dataset}
 
+\subsection*{Random Forest}
+\begin{itemize}
+	\item \text{Split criterion: Information Gain}
+	\item $min\_size\_split = 10$
+	\item $min\_gain = 0.002$
+	\item $max\_depth = 40$
+\end{itemize}
+
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/forest_parkinsons.csv_ig.jpg}
+	\caption{Random forest on Parkinsons dataset}
+	\label{fig:forest-parkinsons}
+\end{figure}
+
+This dataset of all numerical data is quite challenging for the Random Forest algorithm. As accuracy score can be as high as 0.95 with ntree = 30
+or as low as 0.65 at ntree=20. This could be because Decision Tree is not the best at capturing the patterns in numerical data since at most there
+can only be 2 splits at a given node, so the accuracy would fluctuate a lot. However, F1 score is on average really high which means the model has
+a high precision as well as recall. So in certain applications, this model would offers more benefits.
+
+\subsection*{Neural Network}
+\begin{enumerate}[label=(\alph*)]
+	\item \begin{itemize}
+		      \item $\lambda = 0.01$
+		      \item $\alpha = 6$
+	      \end{itemize}
+
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|l|l|l|}
+			      \hline
+			      Architecture     & Accuracy Score & F1 Score \\ \hline
+			      {[}22 4 2{]}     & 0.890476       & 0.943652 \\ \hline
+			      {[}22 20 2{]}    & 0.830956       & 0.943652 \\ \hline
+			      {[}22 10 10 2{]} & 0.830956       & 0.939158 \\ \hline
+			      {[}22 20 20 2{]} & 0.890476       & 0.943652 \\ \hline
+		      \end{tabular}
+	      \end{table}
+	\item \begin{itemize}
+		      \item $\lambda = 0.1$
+		      \item $\alpha = 0.1$
+	      \end{itemize}
+
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|l|l|l|}
+			      \hline
+			      Architecture     & Accuracy Score & F1 Score \\ \hline
+			      {[}22 20 2{]}    & 0.943652       & 1.000000 \\ \hline
+			      {[}22 20 20 2{]} & 0.943652       & 0.890476 \\ \hline
+		      \end{tabular}
+	      \end{table}
+\end{enumerate}
+
+Here, having $\lambda$ a bit higher with a smaller starting $\alpha$ values improve the score overall very much. Even going as far as achieving 1 for F1
+score with certain architectures. More layers still means less performance due to overfitting but with enough neurons, it can be offset. Neural network
+performs very well for this dataset because it is all numerical data with a relatively large attributes number.
+
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/nn_parkinsons.csv_cost.png}
+	\caption{Cost J against the number of instances introduced with $\lambda=0.1, \alpha=0.1$ and architecture [22 20 2]}
+	\label{fig:nn-parkinsons}
+\end{figure}
+
+\subsection*{Extra Credit 3}
+
+We constructed an ensemble that is consisted of a number of different Neural Network that is trained on a bootstrap dataset and get the majority vote
+as the final prediction.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|l|l|l|}
+		\hline
+		               & Digits Dataset & Titanic Dataset & Loan Dataset & Parkinsons Dataset \\ \hline
+		Accuracy Score & 0.903111       & 0.541433        & 0.756577     & 0.803571           \\ \hline
+		F1 Score       & 0.967350       & 0.581284        & 0.756577     & 0.803571           \\ \hline
+	\end{tabular}
+	\caption{Neural Network Ensemble on different datasets, number of estimator = 3}
+\end{table}
+
+Only the Loan dataset performance increases, marginally. This could be because we did not tune the individual neural network to fit the specific dataset.
+The current parameters might suit the Loan dataset the most and if we tune it in favor of the Titanic dataset, we might get an increases in performance
+for Titanic but that could means the other datasets would not notice an increases. Also, this seems to work better on dataset with mix attributes than
+dataset with only numerical attributes.
+
+Note: When running the evalutation, there are overflow warning that may have impact the performance on the datasets.
+
+\subsection*{Summary}
+
+\begin{table}[]
+	\centering
+	\begin{tabular}{|l|ll|ll|ll|ll|}
+		\hline
+		               & \multicolumn{2}{l|}{Digits Dataset} & \multicolumn{2}{l|}{Titanic Dataset} & \multicolumn{2}{l|}{Loan Dataset} & \multicolumn{2}{l|}{Parkinsons Dataset}                                                                                       \\ \hline
+		               & \multicolumn{1}{l|}{Accuracy}       & F1-Score                             & \multicolumn{1}{l|}{Accuracy}     & F1-Score                                & \multicolumn{1}{l|}{Accuracy} & F1-Score & \multicolumn{1}{l|}{Accuracy} & F1-Score \\ \hline
+		KNN            & \multicolumn{1}{l|}{}               &                                      & \multicolumn{1}{l|}{}             &                                         & \multicolumn{1}{l|}{}         &          & \multicolumn{1}{l|}{}         &          \\ \hline
+		Random Forest  & \multicolumn{1}{l|}{0.9}            & 0.96                                 & \multicolumn{1}{l|}{0.83}         & 0.84                                    & \multicolumn{1}{l|}{0.74}     & 0.78     & \multicolumn{1}{l|}{0.94}     & 1        \\ \hline
+		Neural Network & \multicolumn{1}{l|}{0.95}           & 0.99                                 & \multicolumn{1}{l|}{0.825}        & 0.82                                    & \multicolumn{1}{l|}{0.74}     & 0.78     & \multicolumn{1}{l|}{0.94}     & 1        \\ \hline
+		Ensemble       & \multicolumn{1}{l|}{0.9}            & 0.97                                 & \multicolumn{1}{l|}{0.54}         & 0.58                                    & \multicolumn{1}{l|}{0.76}     & 0.76     & \multicolumn{1}{l|}{0.8}      & 0.8      \\ \hline
+	\end{tabular}
+\end{table}
 \end{document}
