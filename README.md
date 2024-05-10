@@ -10,7 +10,13 @@ Possible datasets:
 
 All plots generated are saved in the figures/ directory
 
-## Randon Forest
+## K Nearest Neighbour
+
+```
+python knn.py [dataset] (optional: use flag --normalize to enable data normalization)
+```
+
+## Random Forest
 
 ```
 python random_forest_runner.py [dataset] [criterion] [min_size_split] [min_gain] [max_depth]
@@ -34,6 +40,8 @@ python nn_plot.py [dataset] [lambda] [alpha] [num_hidden_layers] [neurons per hi
 python nn_ensemble.py [dataset]
 ```
 
-## Note
+## Multinomial Logistic Regression
 
-Most of the algorithm are implemented with multiprocessing module when running evaluations so beware of too much CPU usage.
+```
+python logistic_regression.py [dataset]
+```

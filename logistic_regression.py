@@ -113,14 +113,14 @@ def main(filename, is_normalize=True):
 
 if __name__ == '__main__':
     if len(sys.argv) not in [2, 3]:
-        print("Usage: python main.py <filename> (optional: use flag --normalize to enable data normalization)")
+        print("Usage: python logistic_regression.py <filename> (optional: use flag --normalize to enable data normalization)")
         sys.exit(1)
     if len(sys.argv) == 3:
         if sys.argv[2] == '--normalize':
             main(sys.argv[1], is_normalize=True)
         else:
             print(
-                "Usage: python main.py <filename> (optional: use flag --normalize to enable data normalization)")
+                "Usage: python logistic_regression.py <filename> (optional: use flag --normalize to enable data normalization)")
         sys.exit(1)
     else:
         main(sys.argv[1])
