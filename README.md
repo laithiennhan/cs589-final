@@ -32,3 +32,7 @@ python nn_plot.py [dataset] [lambda] [alpha] [num_hidden_layers] [neurons per hi
 ```
 python nn_ensemble.py [dataset]
 ```
+
+## Note
+
+Most of the algorithm are implemented with multiprocessing module when running evaluations so beware of too much CPU usage.

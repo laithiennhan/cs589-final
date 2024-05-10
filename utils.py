@@ -170,8 +170,10 @@ def convert_to_float(item):
 
 
 def ordinal_encoding(dataset, categorical_indices):
+    data = np.array(dataset)
     enc = OrdinalEncoder()
-    dataset[:, categorical_indices] = enc.fit_transform(dataset[:, categorical_indices])
+    data[:, categorical_indices] = enc.fit_transform(data[:, categorical_indices])
+    return data
 
 
 def load_data(filename, encode=False):
@@ -195,7 +197,7 @@ def load_data(filename, encode=False):
         if encode:
             data = one_hot_encode(data, [0, 1, 3, 4, 9, 10])
         else:
-            ordinal_encoding(data, [0, 1, 3, 4, 9, 10])
+            data = ordinal_encoding(data, [0, 1, 3, 4, 9, 10])
 
     elif filename == "titanic.csv":
         with open("datasets/titanic.csv", "r") as file:
@@ -211,7 +213,7 @@ def load_data(filename, encode=False):
         if encode:
             data = one_hot_encode(data, [1])
         else:
-            ordinal_encoding(data, [1])
+            data = ordinal_encoding(data, [1])
     elif filename == "digits":
         data, label = load_digits(return_X_y=True)
     elif filename == "cleveland.csv":
@@ -226,7 +228,8 @@ def load_data(filename, encode=False):
                 data.append(features)
             if encode:
                 data = one_hot_encode(data, [1, 2, 5, 6, 8, 10, 12])
-            data = np.array(data)
+            else:
+                data = ordinal_encoding(data, [1, 2, 5, 6, 8, 10, 12])
     else:
         with open(f"datasets/{filename}", "r") as file:
             csvFile = csv.reader(file)
@@ -235,7 +238,5 @@ def load_data(filename, encode=False):
                 features = [convert_to_float(item) for item in line[:-1]]
                 label.append(line[-1])
                 data.append(features)
-
-        data = np.array(data)
 
     return np.array(data, dtype=float), np.array(label, dtype=float)

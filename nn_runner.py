@@ -51,7 +51,7 @@ if __name__ == "__main__":
     if "digit" in dataset_name:
         output_size = 10
     elif "cleveland" in dataset_name:
-        output_size = 2
+        output_size = 5
     else:
         output_size = 2
 

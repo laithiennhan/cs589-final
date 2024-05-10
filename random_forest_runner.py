@@ -54,6 +54,22 @@ if __name__ == "__main__":
         attr_type = [False for _ in range(22)]
     elif "digit" in dataset:
         attr_type = [False for _ in range(64)]
+    elif "cleveland" in dataset:
+        attr_type = [
+            False,
+            True,
+            True,
+            False,
+            False,
+            True,
+            True,
+            False,
+            True,
+            False,
+            True,
+            False,
+            True,
+        ]
 
     if attr_type is None:
         print("Invalid dataset")
