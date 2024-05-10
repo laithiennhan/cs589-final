@@ -6,6 +6,7 @@ Possible datasets:
 - titanic.csv
 - loan.csv
 - parkinsons.csv
+- cleveland.csv
 
 All plots generated are saved in the figures/ directory
 
