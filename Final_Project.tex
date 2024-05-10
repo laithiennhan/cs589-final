@@ -686,10 +686,28 @@ It is worth noting that the Cleveland dataset has 5 classes across all instances
 		\hline
 		               & \multicolumn{2}{l|}{Digits Dataset} & \multicolumn{2}{l|}{Titanic Dataset} & \multicolumn{2}{l|}{Loan Dataset} & \multicolumn{2}{l|}{Parkinsons Dataset}                                                                                       \\ \hline
 		               & \multicolumn{1}{l|}{Accuracy}       & F1-Score                             & \multicolumn{1}{l|}{Accuracy}     & F1-Score                                & \multicolumn{1}{l|}{Accuracy} & F1-Score & \multicolumn{1}{l|}{Accuracy} & F1-Score \\ \hline
-		KNN            & \multicolumn{1}{l|}{}               &                                      & \multicolumn{1}{l|}{}             &                                         & \multicolumn{1}{l|}{}         &          & \multicolumn{1}{l|}{}         &          \\ \hline
+		KNN            & \multicolumn{1}{l|}{0.98}           & 0.975                                 & \multicolumn{1}{l|}{0.81}        & 0.79                                    & \multicolumn{1}{l|}{0.79}     & 0.72     & \multicolumn{1}{l|}{0.84}     & 0.86         \\ \hline
 		Random Forest  & \multicolumn{1}{l|}{0.9}            & 0.96                                 & \multicolumn{1}{l|}{0.83}         & 0.84                                    & \multicolumn{1}{l|}{0.74}     & 0.78     & \multicolumn{1}{l|}{0.94}     & 1        \\ \hline
 		Neural Network & \multicolumn{1}{l|}{0.95}           & 0.99                                 & \multicolumn{1}{l|}{0.825}        & 0.82                                    & \multicolumn{1}{l|}{0.74}     & 0.78     & \multicolumn{1}{l|}{0.94}     & 1        \\ \hline
 		Ensemble       & \multicolumn{1}{l|}{0.9}            & 0.97                                 & \multicolumn{1}{l|}{0.54}         & 0.58                                    & \multicolumn{1}{l|}{0.76}     & 0.76     & \multicolumn{1}{l|}{0.8}      & 0.8      \\ \hline
+		Logistic Regression       & \multicolumn{1}{l|}{0.88}            & 0.88                                & \multicolumn{1}{l|}{0.78}         & 0.77                                   & \multicolumn{1}{l|}{0.81}     & 0.82     & \multicolumn{1}{l|}{0.81}      & 0.86      \\ \hline
+
+	\end{tabular}
+\end{table}
+
+\begin{table}[]
+	\centering
+	\begin{tabular}{|l|ll|ll|ll|ll|}
+		\hline
+		               			& \multicolumn{2}{l|}{Cleveland Dataset} \\ \hline
+		               			& \multicolumn{1}{l|}{Accuracy}       & F1-Score \\ \hline
+		KNN           		  & \multicolumn{1}{l|}{0.55}           & 0.67      \\ \hline                         
+		Random Forest  			& \multicolumn{1}{l|}{}            		&       \\ \hline
+		Neural Network  		& \multicolumn{1}{l|}{}            		&       \\ \hline
+		Ensemble  					& \multicolumn{1}{l|}{}            		&      \\ \hline
+		Logistic Regression & \multicolumn{1}{l|}{0.58}           & 0.7       \\ \hline
+
+
 	\end{tabular}
 \end{table}
 \end{document}
