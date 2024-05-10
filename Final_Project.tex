@@ -620,12 +620,29 @@ Note: When running the evalutation, there are overflow warning that may have imp
 
 \subsection*{Extra Credit 4}
 
-For this extra credit, we have decided to build a Multinominal Logistic Regression model. Traditional Logistic Regressions are usually only suitable for binary classifications.
+For this extra credit, we have decided to build a Multinomial Logistic Regression model. Traditional Logistic Regressions are usually only suitable for binary classifications.
 However, since some of our datasets have more than two classes, we made a few modifications. 
 We use the softmax function to convert logits class scores into probabilities, to ensure that for an instance, the output values (probability) of all classes are between 0 and 1 and sum up to 1.
 We use batch gradient descent to optimize the weights. After experimenting, we have concluded that the optimal range for the learning rate of our algorithm is between 0.005 and 0.01, and different values in this range produces almost the same results.
- Therefore, we chose to instead investigate the cross entropy cost loss change between iterations (epochs), and whether changing the number of epochs improves performance. 
-\subsubsection*{Digits Dataset}
+Therefore, we chose to instead investigate the cross entropy cost loss change between iterations (epochs), and whether changing the number of epochs improves performance. 
+
+Analysis: Overall, across all 5 datasets, it seems that accuracies and F1 scores tend to converge to a certain value, once the cross entropy loss has reached a stabilized point. 
+The algorithm performs adequately on the digits dataset, since the features here are simple and there are distinct patterns that the model can recognize, although it still performs worse than other algorithms shown above. 
+The loss function decreases in a smooth curve until it reaches a stable low point, indicating that throughout iterations of training and gradient descent, the algorithm seems to be able to minimize the loss function. 
+It is worth noting that the algorithm does not perform well on the titanic, parkinson or loan dataset, usually only achieving maximum around 0.8 for accuracy and sometimes even wildly fluctuating F1 scores. This indicates that for more complex datasets with hard to recognized patterns, the model would struggle. 
+This is especially highlighted for the Cleveland dataset, where accuracy could only reach 0.583, which is only slightly better than a coin toss. 
+It is worth noting that the Cleveland dataset has 5 classes across all instances, therefore it would be hard for the model to capture the underlying patterns. Traditionally, logistic regression is more used in binary classification, thus even after modifying it to accomodate multiclass problems, it still struggle in more complex datasets. 
+ \begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|l|l|l|l|}
+		\hline
+		               & Digits Dataset & Titanic Dataset & Loan Dataset & Parkinsons Dataset & Cleveland Dataset \\ \hline
+		Accuracy Score & 0.884     & 0.7859       & 0.808     & 0.809    &    0.583   \\ \hline
+		F1 Score       & 0.8806     & 0.7693        & 0.8177     & 0.8598  &   0.706   \\ \hline
+	\end{tabular}
+	\caption{Multinomial Logistic Regression on Different Datasets}
+\end{table}
+ \subsubsection*{Digits Dataset}
  \begin{figure}[H]
 	\includegraphics[width=\textwidth]{figures/logistics_digits.png}
 	\caption{Logistic Regression performance on Digits Dataset}

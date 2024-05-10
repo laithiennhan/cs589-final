@@ -66,7 +66,6 @@ def main(filename, is_normalize=True):
 
     
     losses_over_iterations = losses_over_iterations / k
-    print(losses_over_iterations)
 
 
     accuracies_list = []
@@ -86,8 +85,8 @@ def main(filename, is_normalize=True):
         accuracies_list.append(np.mean(accuracies))
         f1_list.append(np.mean(f1_scores))
     
-    print(accuracies_list)
-    print(f1_list)
+    print(max(accuracies_list))
+    print(max(f1_list))
     
     
     plt.figure(figsize=(15, 10))
