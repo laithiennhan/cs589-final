@@ -595,6 +595,22 @@ The full dataset consists of data from many hospitals, but ML researchers have c
 This dataset consists of 13 features regarding personal information about patients (name, age, sex, etc.) and medical information (max heart rates, cholesterol levels, etc.). The dataset consists of both numerical and categorical features. 
 There are 5 labels, depicting the severity of the diagnosis for a patient (0 - no heart disease)
 
+\subsubsection*{KNN}
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/knn_cleveland.csv.png}
+	\caption{KNN Accuracy and F1 score for Cleveland dataset}
+	\label{fig:knn-cleveland}
+\end{figure}
+The Knn algorithm does not have great performance here. In terms of accuracy, it is only better than a coin flip. This can be attributed to the complexity in the dataset, as different attributes would have different importance when considering a person's heart condition. The KNN algorithm uses Euclidean distance, which cannot fully capture the patterns within the dataset, and distinguish between the importance of certain features
+
+\subsubsection*{Multinomial Logistic Regression}
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/logistics_cleveland.csv.png}
+	\caption{Multinomial Logistics Regression Accuracy and F1 score for Cleveland dataset}
+	\label{fig:logistic-cleveland}
+\end{figure}
+
+The algorithm does not perform well within this dataset. The data is highly complex, and the underlying pattern is hard to recognize, especially with many labels.
 \subsection*{Extra Credit 3}
 
 We constructed an ensemble that is consisted of a number of different Neural Network that is trained on a bootstrap dataset and get the majority vote
