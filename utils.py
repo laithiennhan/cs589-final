@@ -224,6 +224,9 @@ def load_data(filename, encode=False):
                 features = [convert_to_float(item) for item in line[:-1]]
                 label.append(line[-1])
                 data.append(features)
+            if encode:
+                data = one_hot_encode(data, [1, 2, 5, 6, 8, 10, 12])
+            data = np.array(data)
     else:
         with open(f"datasets/{filename}", "r") as file:
             csvFile = csv.reader(file)
@@ -232,6 +235,7 @@ def load_data(filename, encode=False):
                 features = [convert_to_float(item) for item in line[:-1]]
                 label.append(line[-1])
                 data.append(features)
+
         data = np.array(data)
 
     return np.array(data, dtype=float), np.array(label, dtype=float)

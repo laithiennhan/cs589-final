@@ -274,12 +274,24 @@ Algorithms we are using:
 	\item Random Forest (by Bang Cao)
 	\item Neural Network (by Bang Cao)
 	\item Neural Network Ensemble
-	\item Linear Regression
+	\item Multinominal Logistic Regression (by Nhan Lai)
 \end{itemize}
 
 \subsection{Digits Dataset}
+\subsection*{k Nearest Neighbour:}
 
-All attributes are numerical so no need for one hot encode.
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/knn_digits.png}
+	\caption{K Nearest Neighbour on Digits dataset}
+	\label{fig:knn-digits}
+\end{figure}
+\begin{itemize}
+	\item The k nearest neighbour algorithm seems to be performing very well for the Digits dataset, although performance decreases at higher k values
+	\item This can be attributed to many factors. Firstly, throughout the instances of the dataset, the contrast between digit pixels and the background 
+	pixels are high. Therefore, the features of each digit are clear and easy to distinguish, which is benificial for knn, as digits with similar features () tend to be the same. 
+	\item However, as the number k increases, the algorithm becomes more generalized, leading to a performance dip, since this diminishes the distinctions between digits.
+	\item Overall, knn seems to be a good choice for the digits dataset, since the pixel features in the dataset are highly distinctive between classes. 
+\end{itemize}
 
 \subsection*{Random Forest}
 \begin{itemize}
@@ -352,6 +364,16 @@ small number (almost constant).
 We remove the name column from the dataset as we think that information does not really help to classify the result. We also one hot encode the categorical
 attributes.
 
+\subsection*{K Nearest Neighbours}
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/knn_titanic.csv.png}
+	\caption{KNN on Titanic dataset}
+	\label{fig:knn-titanic}
+\end{figure}
+For this dataset, kNN does not perform well. The highest accuracy and F1 score is only about 0.8. 
+Firstly, the dataset contains a mix of categorical and numerical attributes. Categorical attributes have to be one-hot encoded in order for the model to work, which leads to the curse of dimensionality, where the number of features is increased. 
+Also, within this dataset, not all attributes have the same importance to whether a pasesenger survives or not. Using Euclidean distance, the model assumes that the weight of each feature is the same, therefore not being able to distinguish between which feature is more important for the classification class.
+
 \subsection*{Random Forest}
 \begin{itemize}
 	\item \text{Split criterion: Information Gain}
@@ -416,6 +438,16 @@ As a result we get an overall relatively equal score for different hyper paramet
 
 We remove the LOAN\_ID column from the dataset as we think that information does not really help to classify the result. We also one hot encode the categorical
 attributes.
+\subsection*{K Nearest Neighbour}
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/knn_loan.csv.png}
+	\caption{KNN on Loan dataset}
+	\label{fig:knn-loan}
+\end{figure}
+
+KNN does not perform well on the loan dataset. The accuracies are all very low (lesser than .8) accross k-values.
+Again, the model faces the same problem as the parkinsons and titanic dataset. In determining whether someone can repay their loans, there are attributes that are more important for consideration than others, 
+and the model clearly cannot capture this. With a combination of both numerical and categorical attributes, especially with a high number of categorical attributes, knn seems to be too simple to accurately make predictions.
 
 \subsection*{Random Forest}
 \begin{itemize}
@@ -481,6 +513,19 @@ capped. Probably because of the many categorical attributes that is one hot enco
 since all of its are 1 and 0 values.
 
 \subsection{Parkinsons Dataset}
+\subsection*{K Nearest Neighbours}
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/knn_parkinsons.csv.png}
+	\caption{K Nearest Neighbour on Parkinsons dataset}
+	\label{fig:knn-parkinsons}
+\end{figure}
+
+This dataset is quite challenging for the kNN algorithms, as it contains a mix of numerical and categorical attributes. 
+The algorithm returns fluctuating results, it peaks at around 0.84 for accuracy at k values between 17 and 29. 
+For k values that are too small (1-5) or too large (greater than 35), the algorithm performs significantly worse. 
+The model performing badly at low k values means that the data is highly complicated and data points that are close (in respect to Euclidean distance) does not necessarily share the same class. 
+And with too high a value of k, the distinctions between features are diminished, and the model is too generalized, leading to wrong predictions. 
+Thus, we came to the conclusion that for this dataset, the kNN algorithm is too simple and does not have the ability to capture all patterns necessary to predict whether a person is diagnosed with parkinsons or not. The model utilizes Euclidean distance, which does not necessarily captures all the patterns and correlations between medical data.
 
 \subsection*{Random Forest}
 \begin{itemize}
@@ -544,6 +589,11 @@ performs very well for this dataset because it is all numerical data with a rela
 	\caption{Cost J against the number of instances introduced with $\lambda=0.1, \alpha=0.1$ and architecture [22 20 2]}
 	\label{fig:nn-parkinsons}
 \end{figure}
+\subsection*{Extra Credit 2}
+For this question, we have selected the Cleveland Heart Disease dataset, which can be found in this link \href[]{https://archive.ics.uci.edu/dataset/45/heart+disease}{here}.
+The full dataset consists of data from many hospitals, but ML researchers have commonly used only data gathered from Cleveland.
+This dataset consists of 13 features regarding personal information about patients (name, age, sex, etc.) and medical information (max heart rates, cholesterol levels, etc.). The dataset consists of both numerical and categorical features. 
+There are 5 labels, depicting the severity of the diagnosis for a patient (0 - no heart disease)
 
 \subsection*{Extra Credit 3}
 
@@ -568,7 +618,67 @@ dataset with only numerical attributes.
 
 Note: When running the evalutation, there are overflow warning that may have impact the performance on the datasets.
 
+\subsection*{Extra Credit 4}
+
+For this extra credit, we have decided to build a Multinomial Logistic Regression model. Traditional Logistic Regressions are usually only suitable for binary classifications.
+However, since some of our datasets have more than two classes, we made a few modifications. 
+We use the softmax function to convert logits class scores into probabilities, to ensure that for an instance, the output values (probability) of all classes are between 0 and 1 and sum up to 1.
+We use batch gradient descent to optimize the weights. After experimenting, we have concluded that the optimal range for the learning rate of our algorithm is between 0.005 and 0.01, and different values in this range produces almost the same results.
+Therefore, we chose to instead investigate the cross entropy cost loss change between iterations (epochs), and whether changing the number of epochs improves performance. 
+
+Analysis: Overall, across all 5 datasets, it seems that accuracies and F1 scores tend to converge to a certain value, once the cross entropy loss has reached a stabilized point. 
+The algorithm performs adequately on the digits dataset, since the features here are simple and there are distinct patterns that the model can recognize, although it still performs worse than other algorithms shown above. 
+The loss function decreases in a smooth curve until it reaches a stable low point, indicating that throughout iterations of training and gradient descent, the algorithm seems to be able to minimize the loss function. 
+It is worth noting that the algorithm does not perform well on the titanic, parkinson or loan dataset, usually only achieving maximum around 0.8 for accuracy and sometimes even wildly fluctuating F1 scores. This indicates that for more complex datasets with hard to recognized patterns, the model would struggle. 
+This is especially highlighted for the Cleveland dataset, where accuracy could only reach 0.583, which is only slightly better than a coin toss. 
+It is worth noting that the Cleveland dataset has 5 classes across all instances, therefore it would be hard for the model to capture the underlying patterns. Traditionally, logistic regression is more used in binary classification, thus even after modifying it to accomodate multiclass problems, it still struggle in more complex datasets. 
+ \begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|l|l|l|l|}
+		\hline
+		               & Digits Dataset & Titanic Dataset & Loan Dataset & Parkinsons Dataset & Cleveland Dataset \\ \hline
+		Accuracy Score & 0.884     & 0.7859       & 0.808     & 0.809    &    0.583   \\ \hline
+		F1 Score       & 0.8806     & 0.7693        & 0.8177     & 0.8598  &   0.706   \\ \hline
+	\end{tabular}
+	\caption{Multinomial Logistic Regression on Different Datasets}
+\end{table}
+ \subsubsection*{Digits Dataset}
+ \begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/logistics_digits.png}
+	\caption{Logistic Regression performance on Digits Dataset}
+	\label{fig:logistics-digits}
+\end{figure}
+\subsubsection*{Titanic Dataset}
+
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/logistics_titanic.csv.png}
+	\caption{Logistic Regression performance on Titanic Dataset}
+	\label{fig:logistics-titanic}
+\end{figure}
+\subsubsection*{Loan Dataset}
+
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/logistics_loan.csv.png}
+	\caption{Logistic Regression performance on Loan Dataset}
+	\label{fig:logistics-loan}
+\end{figure}
+
+\subsubsection*{Parkinson Dataset}
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/logistics_parkinsons.csv.png}
+	\caption{Logistic Regression performance on Parkinsons Dataset}
+	\label{fig:logistics-parkinsons}
+\end{figure}
+\subsubsection*{Cleveland Dataset}
+
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/logistics_cleveland.csv.png}
+	\caption{Logistic Regression performance on Cleveland Dataset}
+	\label{fig:logistics-cleveland}
+\end{figure}
+\newpage
 \subsection*{Summary}
+
 
 \begin{table}[]
 	\centering
@@ -576,10 +686,28 @@ Note: When running the evalutation, there are overflow warning that may have imp
 		\hline
 		               & \multicolumn{2}{l|}{Digits Dataset} & \multicolumn{2}{l|}{Titanic Dataset} & \multicolumn{2}{l|}{Loan Dataset} & \multicolumn{2}{l|}{Parkinsons Dataset}                                                                                       \\ \hline
 		               & \multicolumn{1}{l|}{Accuracy}       & F1-Score                             & \multicolumn{1}{l|}{Accuracy}     & F1-Score                                & \multicolumn{1}{l|}{Accuracy} & F1-Score & \multicolumn{1}{l|}{Accuracy} & F1-Score \\ \hline
-		KNN            & \multicolumn{1}{l|}{}               &                                      & \multicolumn{1}{l|}{}             &                                         & \multicolumn{1}{l|}{}         &          & \multicolumn{1}{l|}{}         &          \\ \hline
+		KNN            & \multicolumn{1}{l|}{0.98}           & 0.975                                 & \multicolumn{1}{l|}{0.81}        & 0.79                                    & \multicolumn{1}{l|}{0.79}     & 0.72     & \multicolumn{1}{l|}{0.84}     & 0.86         \\ \hline
 		Random Forest  & \multicolumn{1}{l|}{0.9}            & 0.96                                 & \multicolumn{1}{l|}{0.83}         & 0.84                                    & \multicolumn{1}{l|}{0.74}     & 0.78     & \multicolumn{1}{l|}{0.94}     & 1        \\ \hline
 		Neural Network & \multicolumn{1}{l|}{0.95}           & 0.99                                 & \multicolumn{1}{l|}{0.825}        & 0.82                                    & \multicolumn{1}{l|}{0.74}     & 0.78     & \multicolumn{1}{l|}{0.94}     & 1        \\ \hline
 		Ensemble       & \multicolumn{1}{l|}{0.9}            & 0.97                                 & \multicolumn{1}{l|}{0.54}         & 0.58                                    & \multicolumn{1}{l|}{0.76}     & 0.76     & \multicolumn{1}{l|}{0.8}      & 0.8      \\ \hline
+		Logistic Regression       & \multicolumn{1}{l|}{0.88}            & 0.88                                & \multicolumn{1}{l|}{0.78}         & 0.77                                   & \multicolumn{1}{l|}{0.81}     & 0.82     & \multicolumn{1}{l|}{0.81}      & 0.86      \\ \hline
+
+	\end{tabular}
+\end{table}
+
+\begin{table}[]
+	\centering
+	\begin{tabular}{|l|ll|ll|ll|ll|}
+		\hline
+		               			& \multicolumn{2}{l|}{Cleveland Dataset} \\ \hline
+		               			& \multicolumn{1}{l|}{Accuracy}       & F1-Score \\ \hline
+		KNN           		  & \multicolumn{1}{l|}{0.55}           & 0.67      \\ \hline                         
+		Random Forest  			& \multicolumn{1}{l|}{}            		&       \\ \hline
+		Neural Network  		& \multicolumn{1}{l|}{}            		&       \\ \hline
+		Ensemble  					& \multicolumn{1}{l|}{}            		&      \\ \hline
+		Logistic Regression & \multicolumn{1}{l|}{0.58}           & 0.7       \\ \hline
+
+
 	\end{tabular}
 \end{table}
 \end{document}
