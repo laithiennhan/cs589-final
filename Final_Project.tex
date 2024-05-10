@@ -274,12 +274,24 @@ Algorithms we are using:
 	\item Random Forest (by Bang Cao)
 	\item Neural Network (by Bang Cao)
 	\item Neural Network Ensemble
-	\item Linear Regression
+	\item Multinominal Logistic Regression (by Nhan Lai)
 \end{itemize}
 
 \subsection{Digits Dataset}
+\subsection*{k Nearest Neighbour:}
 
-All attributes are numerical so no need for one hot encode.
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/knn_digits.png}
+	\caption{K Nearest Neighbour on Digits dataset}
+	\label{fig:forest-digits}
+\end{figure}
+\begin{itemize}
+	\item The k nearest neighbour algorithm seems to be performing very well for the Digits dataset, although performance decreases at higher k values
+	\item This can be attributed to many factors. Firstly, throughout the instances of the dataset, the contrast between digit pixels and the background 
+	pixels are high. Therefore, the features of each digit are clear and easy to distinguish, which is benificial for knn, as digits with similar features () tend to be the same. 
+	\item However, as the number k increases, the algorithm becomes more generalized, leading to a performance dip, since this diminishes the distinctions between digits.
+	\item Overall, knn seems to be a good choice for the digits dataset, since the pixel features in the dataset are highly distinctive between classes. 
+\end{itemize}
 
 \subsection*{Random Forest}
 \begin{itemize}
