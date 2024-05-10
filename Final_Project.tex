@@ -283,7 +283,7 @@ Algorithms we are using:
 \begin{figure}[H]
 	\includegraphics[width=\textwidth]{figures/knn_digits.png}
 	\caption{K Nearest Neighbour on Digits dataset}
-	\label{fig:forest-digits}
+	\label{fig:knn-digits}
 \end{figure}
 \begin{itemize}
 	\item The k nearest neighbour algorithm seems to be performing very well for the Digits dataset, although performance decreases at higher k values
@@ -364,6 +364,16 @@ small number (almost constant).
 We remove the name column from the dataset as we think that information does not really help to classify the result. We also one hot encode the categorical
 attributes.
 
+\subsection*{K Nearest Neighbours}
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/knn_titanic.csv.png}
+	\caption{KNN on Titanic dataset}
+	\label{fig:knn-titanic}
+\end{figure}
+For this dataset, kNN does not perform well. The highest accuracy and F1 score is only about 0.8. 
+Firstly, the dataset contains a mix of categorical and numerical attributes. Categorical attributes have to be one-hot encoded in order for the model to work, which leads to the curse of dimensionality, where the number of features is increased. 
+Also, within this dataset, not all attributes have the same importance to whether a pasesenger survives or not. Using Euclidean distance, the model assumes that the weight of each feature is the same, therefore not being able to distinguish between which feature is more important for the classification class.
+
 \subsection*{Random Forest}
 \begin{itemize}
 	\item \text{Split criterion: Information Gain}
@@ -428,6 +438,16 @@ As a result we get an overall relatively equal score for different hyper paramet
 
 We remove the LOAN\_ID column from the dataset as we think that information does not really help to classify the result. We also one hot encode the categorical
 attributes.
+\subsection*{K Nearest Neighbour}
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/knn_loan.csv.png}
+	\caption{KNN on Loan dataset}
+	\label{fig:knn-loan}
+\end{figure}
+
+KNN does not perform well on the loan dataset. The accuracies are all very low (lesser than .8) accross k-values.
+Again, the model faces the same problem as the parkinsons and titanic dataset. In determining whether someone can repay their loans, there are attributes that are more important for consideration than others, 
+and the model clearly cannot capture this. With a combination of both numerical and categorical attributes, especially with a high number of categorical attributes, knn seems to be too simple to accurately make predictions.
 
 \subsection*{Random Forest}
 \begin{itemize}
@@ -493,6 +513,19 @@ capped. Probably because of the many categorical attributes that is one hot enco
 since all of its are 1 and 0 values.
 
 \subsection{Parkinsons Dataset}
+\subsection*{K Nearest Neighbours}
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{figures/knn_parkinsons.csv.png}
+	\caption{K Nearest Neighbour on Parkinsons dataset}
+	\label{fig:knn-parkinsons}
+\end{figure}
+
+This dataset is quite challenging for the kNN algorithms, as it contains a mix of numerical and categorical attributes. 
+The algorithm returns fluctuating results, it peaks at around 0.84 for accuracy at k values between 17 and 29. 
+For k values that are too small (1-5) or too large (greater than 35), the algorithm performs significantly worse. 
+The model performing badly at low k values means that the data is highly complicated and data points that are close (in respect to Euclidean distance) does not necessarily share the same class. 
+And with too high a value of k, the distinctions between features are diminished, and the model is too generalized, leading to wrong predictions. 
+Thus, we came to the conclusion that for this dataset, the kNN algorithm is too simple and does not have the ability to capture all patterns necessary to predict whether a person is diagnosed with parkinsons or not. The model utilizes Euclidean distance, which does not necessarily captures all the patterns and correlations between medical data.
 
 \subsection*{Random Forest}
 \begin{itemize}
